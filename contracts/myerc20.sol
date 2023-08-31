@@ -15,5 +15,13 @@ contract myerc20 {
         totalSupply = 1000000;
     }
 
-    
+    function transfer(address _to, uint256 _value) public  returns (bool success) {
+        require(_to != address(0), "Invalid recipient address");
+        require(balanceOf[msg.sender] >= _value, "Not enough balance");
+
+        balanceOf[msg.sender] -= _value;
+        balanceOf[_to] += _value;
+        
+        return true;
+    }
 }
