@@ -13,6 +13,7 @@ contract myerc20 {
         name = "poorcoin";
         symbol= "poor";
         totalSupply = 1000000;
+        balanceOf[msg.sender] = totalSupply;
     }
 
     function transfer(address _to, uint256 _value) public  returns (bool success) {
@@ -23,5 +24,13 @@ contract myerc20 {
         balanceOf[_to] += _value;
         
         return true;
+    }
+
+    function transferFrom(address _from, address _to, uint256 _value) public returns (bool success){
+        
+        balanceOf[_from] -= _value;
+        balanceOf[_to] += _value;
+
+        
     }
 }
