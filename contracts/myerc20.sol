@@ -7,9 +7,11 @@ contract myerc20 {
     uint256 decimals public = 18;
     uint256 totalSupply public;
 
+// mappings
     mapping (address => uint) balanceOf;
     mapping (address => mapping(address=>uint256)) public allowance;
 
+// constructor
     constructor(){
         name = "poorcoin";
         symbol= "poor";
