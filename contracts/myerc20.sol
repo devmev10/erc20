@@ -8,12 +8,23 @@ contract myerc20 {
     uint256 totalSupply public;
 
     mapping (address => uint) balanceOf;
+    mapping (address => mapping(address=>uint256)) public allowance;
 
     constructor(){
         name = "poorcoin";
         symbol= "poor";
         totalSupply = 1000000;
         balanceOf[msg.sender] = totalSupply;
+    }
+
+    // events
+    event Approval(address indexed _owner, address indexed _spender, uint256 _value);
+    event Transfer(address indexed _from, address indexed _to, uint256 _value);
+
+    function approve(address _spender, uint256 _value) public returns(bool success){
+        allowance[msg.sender][_spender] = _value;
+        emit Approval(msg.sender, _spender, _value);
+        return true;
     }
 
     function transfer(address _to, uint256 _value) public  returns (bool success) {
@@ -30,7 +41,10 @@ contract myerc20 {
         
         balanceOf[_from] -= _value;
         balanceOf[_to] += _value;
+        allowance[_from][msg.sender] -= _value; // adjust allowance after transfer
 
+        emit Transfer(_from, _to, _value);
+        return true;
         
     }
 }
