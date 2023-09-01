@@ -13,7 +13,7 @@ contract myerc20 {
     constructor(){
         name = "poorcoin";
         symbol= "poor";
-        totalSupply = 1000000;
+        totalSupply = 1000000 * (10**decimals);
         balanceOf[msg.sender] = totalSupply;
     }
 
@@ -21,12 +21,14 @@ contract myerc20 {
     event Approval(address indexed _owner, address indexed _spender, uint256 _value);
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
 
+// Function to approve the spender and spend limit
     function approve(address _spender, uint256 _value) public returns(bool success){
         allowance[msg.sender][_spender] = _value;
         emit Approval(msg.sender, _spender, _value);
         return true;
     }
 
+// Function to transfer tokens to another address
     function transfer(address _to, uint256 _value) public  returns (bool success) {
         require(_to != address(0), "Invalid recipient address");
         require(balanceOf[msg.sender] >= _value, "Not enough balance");
@@ -34,14 +36,20 @@ contract myerc20 {
         balanceOf[msg.sender] -= _value;
         balanceOf[_to] += _value;
         
+        emit Transfer(msg.sender, _to, _value);
         return true;
     }
 
+// Function to transfer tokens on behalf of owner by third party like DEX
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success){
-        
+        require(_from != address(0), "Invalid sender address");
+        require(_to != address(0), "Invalid recipient address");
+        require(balanceOf[_from] >= _value, "Not enough balance");
+        require(allowance[_from][msg.sender] >= _value, "Allowance exceeded");
+
         balanceOf[_from] -= _value;
         balanceOf[_to] += _value;
-        allowance[_from][msg.sender] -= _value; // adjust allowance after transfer
+        allowance[_from][msg.sender] -= _value; // reduce allowance after transfer
 
         emit Transfer(_from, _to, _value);
         return true;
