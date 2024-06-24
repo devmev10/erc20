@@ -11,6 +11,23 @@ contract myerc20 {
     mapping(address => uint256) public balanceOf;
     mapping(address => mapping(address => uint256)) public allowance;
 
+    /* 
+    allowance=  
+                {
+                    0xabc: {0xiqu:100, 0xt55:50},
+                    0xdef: {0xrqe:65},
+                    0xseb: {0xprr:800}
+                }
+
+    balanceOf=  
+                {
+                    0xabc: 10000,
+                    0xdef: 1500,
+                    0xseb: 6300
+                }
+
+    */
+
     // constructor
     constructor() {
         name = "Poor Coin";
@@ -27,7 +44,7 @@ contract myerc20 {
     );
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
 
-    // Function to approve the spender and spend limit
+    // Function to approve the spender and spend limits
     function approve(
         address _spender,
         uint256 _value
